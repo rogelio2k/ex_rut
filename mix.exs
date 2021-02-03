@@ -1,7 +1,7 @@
 defmodule ExRut.MixProject do
   use Mix.Project
 
-  @source_url "https://github.com/bloqzilla/ex_rut"
+  @source_url "https://github.com/rogelio2k/ex_rut"
   @version "0.1.0"
 
   def project do
