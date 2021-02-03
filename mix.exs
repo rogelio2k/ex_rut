@@ -32,7 +32,9 @@ defmodule ExRut.MixProject do
 
   # Dependencies configuration
   defp deps do
-    []
+    [
+      {:ex_doc, ">= 0.0.0", only: :dev}
+    ]
   end
 
   # Package information
