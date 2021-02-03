@@ -6,6 +6,7 @@ defmodule ExRut.MixProject do
 
   def project do
     [
+      # main
       app: :ex_rut,
       version: @version,
       elixir: "~> 1.9",
@@ -13,7 +14,7 @@ defmodule ExRut.MixProject do
       deps: deps(),
 
       # hex
-      description: "An Elixir library to validate and format chilean ID/TAX number ('RUN\/RUT')",
+      description: "An Elixir library to validate and format chilean ID/TAX number ('RUN/RUT')",
       package: package(),
 
       # docs
@@ -22,21 +23,19 @@ defmodule ExRut.MixProject do
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
+  # Application configuration
   def application do
     [
       extra_applications: [:logger]
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
+  # Dependencies configuration
   defp deps do
-    [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
-    ]
+    []
   end
 
+  # Package information
   defp package do
     [
       maintainers: ["Rogelio Castillo A."],
@@ -46,6 +45,7 @@ defmodule ExRut.MixProject do
     ]
   end
 
+  # Docs configuration
   defp docs do
     [
       main: "ExRut",

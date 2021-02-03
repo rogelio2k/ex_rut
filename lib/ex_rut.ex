@@ -1,23 +1,15 @@
 defmodule ExRut do
   @moduledoc """
-  A library to format and validate a chilean ID/TAX (RUT/RUN)
+  An Elixir library to validate and format chilean ID/TAX number ('RUN/RUT')
   """
 
   @regex_rut ~r/^((?'num'\d{1,3}(?:([\.\,]?)\d{1,3}){2})(-?)(?'dv'[\dkK]))$/
+
   @defaults [
     delimiter: ".",
     show_dv: true
   ]
 
-  # @doc """
-  # Hello world.
-  #
-  # ## Examples
-  #
-  #     iex> ExRut.hello()
-  #     :world
-  #
-  # """
   def valid?(rut) when is_binary(rut) do
     case get_rut_values(rut) do
       {:ok, number, dv} ->
@@ -79,6 +71,7 @@ defmodule ExRut do
         [delimit_integer(num, delimiter), dv]
         |> Enum.reject(&is_nil/1)
         |> Enum.join(dash)
+
       {:ok, formatted_rut}
     else
       {:error, :invalid_value}
@@ -129,6 +122,7 @@ defmodule ExRut do
     rut = clean_rut(rut)
 
     cond do
+      # valid format
       Regex.match?(@regex_rut, rut) ->
         get_clean_rut_values(@regex_rut, rut)
       # invalid format
@@ -141,13 +135,11 @@ defmodule ExRut do
     rut = clean_rut(rut)
 
     %{"num" => number, "dv" => dv} = Regex.named_captures(regex, rut)
-
     dv = String.downcase(dv)
 
     case Integer.parse(number) do
       {number_as_int, ""} ->
         {:ok, number_as_int, dv}
-
       :error ->
         {:error, :invalid_rut}
     end
