@@ -4,7 +4,7 @@ defmodule ExRut do
   """
 
   @regex_rut ~r/^((?'num'\d{1,3}(?:([\.\,]?)\d{1,3}){2})(-?)(?'dv'[\dkK]))$/
-
+  @mod_dv 11
   @defaults [
     delimiter: ".",
     show_dv: true
@@ -97,25 +97,15 @@ defmodule ExRut do
       |> split_integer
       |> Enum.reverse
       |> Enum.with_index(2)
-      |> Enum.map(fn {n, index} ->
-        if index > 7 do
-          {n, (index-6)}
-        else
-          {n, index}
-        end
-      end)
-      |> Enum.reduce(0, fn {n, index}, acc ->
-        acc + (n * index)
-      end)
-      |> Kernel.rem(11)
-      |> Kernel.-(11)
-      |> Kernel.abs
+      |> Enum.reduce(0, fn({n, index}, acc) -> if index > 7, do: (index - 6) * n + acc, else: index * n + acc end)
+      |> rem(@mod_dv)
+      case @mod_dv - calculated_dv do
+        @mod_dv -> "0"
 
-    cond do
-      calculated_dv == 11 -> "0"
-      calculated_dv == 10 -> "k"
-      true -> Integer.to_string(calculated_dv)
-    end
+        10 -> "k"
+
+        other -> to_string(other)
+      end
   end
 
   defp get_rut_values(rut) do
@@ -154,7 +144,7 @@ defmodule ExRut do
   defp split_integer(number) when is_integer(number) do
     number
     |> Kernel.to_string()
-    |> String.split("", trim: true)
+    |> String.graphemes()
     |> Enum.map(fn int_string ->
       Integer.parse(int_string)
       |> case do
